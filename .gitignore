@@ -1,0 +1,11 @@
+_ReSharper.knowledgeBank
+/kBank.Data/obj
+/kBank.Data/bin
+/kBank.Domain/obj
+/kBank.Domain/bin
+/kBank.Web.Api/obj
+/kBank.Web.Api/bin
+/kBank.Web/obj
+/kBank.Web/bin
+*.user
+*.suo
