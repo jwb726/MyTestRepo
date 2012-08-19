@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\IKnowledgeBankDataSource.cs" />
+    <Compile Include="Core\ProjectUser.cs" />
+    <Compile Include="Core\ProjectUserType.cs" />
+    <Compile Include="Core\User.cs" />
     <Compile Include="Primitives\OperationStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Project.cs" />

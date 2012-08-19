@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using kBank.Data.Repositories;
 using kBank.Domain.Core;
+using kBank.Web.Api.Utils;
 
 namespace kBank.Web.Api.Controllers
 {

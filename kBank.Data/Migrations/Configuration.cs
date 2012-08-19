@@ -4,7 +4,6 @@ using kBank.Domain.Core;
 namespace kBank.Data.Migrations
 {
     using System.Data.Entity.Migrations;
-    using Domain;
     using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<KnowledgeBankDb>

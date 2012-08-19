@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using kBank.Domain.Core;
 using kBank.Domain.Primitives;
 
@@ -8,17 +9,10 @@ namespace kBank.Data.Repositories
     {
         Project GetProject(int projectId);
         IEnumerable<Project> GetAllProjects();
+        IEnumerable<Project> GetProjectsForUser(int userId);
         OperationStatus<Project> UpdateProject(Project project);
         Project CreateProject(Project project);
         OperationStatus DeleteProject(int projectId);
-    }
-
-    public interface IUserRepository
-    {
-        User GetUser(int userId);
-        IEnumerable<User> GetAllUsers();
-        OperationStatus<User> UpdateUser(User user);
-        User CreateUser(User user);
-        OperationStatus DeleteUser(int userId);
+        Task<OperationStatus<ProjectUser>> AddUserToProject(int projectId, int userId, int userTypeId);
     }
 }

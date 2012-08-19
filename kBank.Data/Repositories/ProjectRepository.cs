@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using kBank.Data.Core;
 using kBank.Domain.Core;
 using kBank.Domain.Primitives;
@@ -16,6 +19,81 @@ namespace kBank.Data.Repositories
                 var project = context.Projects.SingleOrDefault(p => p.Id == projectId);
                 return project;
             }
+        }
+
+        public IEnumerable<Project> GetProjectsForUser(int userId)
+        {
+            using (var context = DataContext)
+            {
+                var projects = context.ProjectUsers
+                    .Where(pu => pu.User.Id == userId)
+                    .Select(pu => pu.Project)
+                    .ToList();
+
+                return projects;
+            }
+        }
+
+        public Task<OperationStatus<ProjectUser>> AddUserToProject(int projectId, int userId, int userTypeId)
+        {
+            return Task.Factory.StartNew(f =>
+                {
+                    using (var context = DataContext)
+                    {
+                        try
+                        {
+                            Thread.Sleep(4000);
+
+                            var exists = context.ProjectUsers.Any(
+                                    pu => pu.Project.Id == projectId && pu.User.Id == userId);
+
+                            if (exists)
+                            {
+                                return OperationStatus<ProjectUser>.CreateFromFailure("User already exists");
+                            }
+
+                            var userType = context.ProjectUserTypes.Find(userTypeId);
+
+                            if (userType == null)
+                            {
+                                return OperationStatus<ProjectUser>.CreateFromFailure("Unknown user type");
+                            }
+
+                            var project = context.Projects.Find(projectId);
+
+                            if (project == null)
+                            {
+                                return OperationStatus<ProjectUser>.CreateFromFailure("Unknown project");
+                            }
+
+                            var user = context.Users.Find(userId);
+
+                            if (user == null)
+                            {
+                                return OperationStatus<ProjectUser>.CreateFromFailure("Unknown user");
+                            }
+
+                            var projectUser = new ProjectUser
+                                {
+                                    Project = project,
+                                    User = user,
+                                    UserType = userType
+                                };
+
+                            var resultingUser = context.ProjectUsers.Add(projectUser);
+                            context.SaveChanges();
+
+                            return OperationStatus<ProjectUser>.CreateFromResult(resultingUser);
+                        }
+                        catch (Exception e)
+                        {
+                            return OperationStatus<ProjectUser>.CreateFromException("Adding user to project failed", e);
+                        }
+                    }
+
+                }, null);
+
+
         }
 
         public IEnumerable<Project> GetAllProjects()

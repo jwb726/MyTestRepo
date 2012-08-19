@@ -18,6 +18,19 @@ namespace kBank.Data.Repositories
             }
         }
 
+        public IEnumerable<User> GetUsersForProject(int projectId)
+        {
+            using (var context = DataContext)
+            {
+                var users = context.ProjectUsers
+                    .Where(pu => pu.Project.Id == projectId)
+                    .Select(pu => pu.User)
+                    .ToList();
+
+                return users;
+            }
+        }
+
         public IEnumerable<User> GetAllUsers()
         {
             using (var context = DataContext)

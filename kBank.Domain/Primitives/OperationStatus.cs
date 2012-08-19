@@ -33,6 +33,18 @@ namespace kBank.Domain.Primitives
             return new OperationStatus<T> { Result = result, Succeeded = true };
         }
 
+        public static OperationStatus<T> CreateFromFailure(string message)
+        {
+            var opStatus = new OperationStatus<T>
+            {
+                Message = message,
+                OperationId = null,
+                Succeeded = false
+            };
+
+            return opStatus;
+        }
+
         public static OperationStatus<T> CreateFromException(string message, Exception ex)
         {
             var opStatus = new OperationStatus<T>
